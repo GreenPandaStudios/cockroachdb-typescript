@@ -19,10 +19,12 @@ export default function Leaderboard() {
     const [leaders, setLeaders] = useState([] as Leader[]);
 
     useEffect(() => {
-        fetch('/.netlify/functions/getScores')
+        fetch('/.netlify/functions/getScores').then(c=>c.text().then(c=>console.log(c)));
+        /*
             .then(response => response.json() as Promise<Leader[]>)
             .then(data => setLeaders(data));
-    }, []);
+            */
+        }, []);
 
     return <>
         <h2>Leaderboard</h2>
