@@ -1,0 +1,40 @@
+import { Handler } from '@netlify/functions'
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient();
+interface Memory {
+    id:number,
+    month: number,
+    day: number,
+    year: number,
+    memory: string,
+    place: string,
+    name: string,
+    show_name: boolean
+}
+
+const handler: Handler = async (event, context) => {
+  // load all the memory objects at this month, day, year pair
+  // from the players table.
+  const allMemories = await prisma.memory.findMany();
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(allMemories.map(mem => (
+      // flatten player name into score entry 
+      {
+        id: Number(mem.id),
+        month: Number(mem.memory),
+        day: Number(mem.day),
+        year: Number(mem.year),
+        memory: mem.memory,
+        place: mem.place,
+        name: mem.name,
+        show_name: mem.show_name
+        }
+        )))
+  }
+}
+
+export { handler }
+

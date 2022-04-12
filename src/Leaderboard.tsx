@@ -1,46 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 
-interface Leader {
-    id: number,
+interface Memory {
+    id:number,
+    month: number,
+    day: number,
+    year: number,
+    memory: string,
+    place: string,
     name: string,
-    score: number
+    show_name: boolean
 }
 
-function renderLeader(leader: Leader) {
-    return <tr key={leader.id}>
-        <td>{leader.name}</td>
-        <td>{leader.score}</td>
+function renderMemory(memory: Memory) {
+    return <tr key={memory.id}>
+        <td>{memory.name}</td>
+        <td>{memory.memory}</td>
+        <td>{memory.place}</td>
     </tr>
 }
 
 export default function Leaderboard() {
 
-    const [leaders, setLeaders] = useState([] as Leader[]);
+    const [memories, setMemories] = useState([] as Memory[]);
 
     useEffect(() => {
-        fetch('/.netlify/functions/getScores').then(c=>c.text().then(c=>console.log(c)));
+        fetch('/.netlify/functions/getMemories').then(c=>c.text().then(c=>console.log(c)));
         /*
             .then(response => response.json() as Promise<Leader[]>)
             .then(data => setLeaders(data));
             */
-           setLeaders([]);
+           setMemories([]);
         }, []);
 
     return <>
-        <h2>Leaderboard</h2>
-        {leaders.length === 0 ? 
-            <div>No leader scores to display. Would you like to <Link to="admin">add one</Link>?</div>
+        <h2>Memories</h2>
+        {memories.length === 0 ? 
+        null
         :
             <table className="table leader-table">
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Score</th>
+                        <th>Memory</th>
+                        <th>Place</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {leaders.map(l => renderLeader(l))}
+                    {memories.map(m => renderMemory(m))}
                 </tbody>
             </table>
         }
