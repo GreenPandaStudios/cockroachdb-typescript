@@ -24,6 +24,7 @@ export default function Leaderboard() {
             .then(response => response.json() as Promise<Leader[]>)
             .then(data => setLeaders(data));
             */
+           setLeaders([]);
         }, []);
 
     return <>
